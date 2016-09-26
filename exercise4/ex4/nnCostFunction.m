@@ -78,6 +78,20 @@ for i = 1:m
 	J += (1 / m) * sum(-y_matrix(i, :)' .* log(h) - (1 - y_matrix(i, :)') .* log(1 - h));
 end
 
+r = 0;
+for i = 1:hidden_layer_size
+	theta1_r = Theta1(i, :);
+	theta1_r(1) = 0;
+	r += sum(theta1_r .^ 2);
+end
+for i = 1:num_labels
+	theta2_r = Theta2(i, :);
+	theta2_r(1) = 0;
+	r += sum(theta2_r .^ 2);
+end
+r = (lambda / (2 * m)) * r;
+J += r;
+
 % -------------------------------------------------------------
 
 % =========================================================================
