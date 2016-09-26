@@ -62,23 +62,21 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% See the comment on page 5 after the double sum.
+y_matrix = zeros(m, num_labels);
+for i = 1:m
+	y_matrix(i, y(i)) = 1;
+end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+for i = 1:m
+	a1 = [1 X(i, :)]';
+	z2 = Theta1 * a1;
+	a2 = [1; sigmoid(z2)];
+	z3 = Theta2 * a2;
+	a3 = sigmoid(z3);
+	h = a3;
+	J += (1 / m) * sum(-y_matrix(i, :)' .* log(h) - (1 - y_matrix(i, :)') .* log(1 - h));
+end
 
 % -------------------------------------------------------------
 
