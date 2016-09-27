@@ -82,7 +82,25 @@ J += r;
 
 % -------------------------------------------------------------
 
+for t = 1:m
+	a1 = X(t, :); % (1, n + 1)
+	z2 = Theta1 * a1'; % (hidden_layer_size, n + 1) * (n + 1, 1) = (hidden_layer_size, 1)
+	a2 = [1 sigmoid(z2)']; % (1, hidden_layer_size + 1)
+	z3 = Theta2 * a2'; % (num_labels, hidden_layer_size + 1) * (hidden_layer_size + 1, 1) = (num_labels, 1)
+	a3 = sigmoid(z3);
 
+	% Backprop now!
+	z2 = [1; z2];
+	d3 = a3 - yy(t, :)'; % (num_labels, 1)
+	d2 = (Theta2' * d3) .* sigmoidGradient(z2); % (hidden_layer_size + 1, num_labels) * (num_labels, 1) = (hidden_layer_size + 1, 1)
+	d2 = d2(2:end); % (hidden_layer_size, 1)
+
+	Theta2_grad = Theta2_grad + d3 * a2; % (num_labels, 1) * (1, hidden_layer_size + 1) = (num_labels, hidden_layer_size + 1)
+	Theta1_grad = Theta1_grad + d2 * a1; % (hidden_layer_size, 1) * (1, n + 1) = (hidden_layer_size, n + 1)
+end
+
+Theta1_grad = Theta1_grad ./ m;
+Theta2_grad = Theta2_grad ./ m;
 
 % =========================================================================
 
