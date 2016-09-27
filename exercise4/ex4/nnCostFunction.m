@@ -62,17 +62,17 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
-% See the comment on page 5 after the double sum.
+% See the comment on page 5, after the double sum.
 yy = zeros(m, num_labels);
 for i = 1:m
 	yy(i, y(i)) = 1;
 end
 
-X = [ones(m, 1) X];
+X = [ones(m, 1) X]; % (m, n + 1)
 a1 = X;
-z2 = Theta1 * a1';
-a2 = [ones(m, 1) sigmoid(z2)'];
-z3 = Theta2 * a2';
+z2 = Theta1 * a1'; % (hidden_layer_size, n + 1) * (n + 1, m) = (hidden_layer_size, m)
+a2 = [ones(m, 1) sigmoid(z2)']; % (m, hidden_layer_size + 1)
+z3 = Theta2 * a2'; % (num_labels, hidden_layer_size + 1) * (hidden_layer_size + 1, m) = (num_labels, m)
 a3 = sigmoid(z3);
 h = a3;
 J = (1 / m) * sum(sum(-yy' .* log(h) - (1 - yy') .* log(1 - h)));
@@ -81,6 +81,8 @@ r = (lambda / (2 * m)) * (sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:
 J += r;
 
 % -------------------------------------------------------------
+
+
 
 % =========================================================================
 
