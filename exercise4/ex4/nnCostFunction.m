@@ -99,8 +99,12 @@ for t = 1:m
 	Theta1_grad = Theta1_grad + d2 * a1; % (hidden_layer_size, 1) * (1, n + 1) = (hidden_layer_size, n + 1)
 end
 
-Theta1_grad = Theta1_grad ./ m;
-Theta2_grad = Theta2_grad ./ m;
+% Theta1_grad = Theta1_grad ./ m;
+% Theta2_grad = Theta2_grad ./ m;
+Theta1_grad(:, 1) = Theta1_grad(:, 1) ./ m;
+Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) ./ m + (lambda / m) * Theta1(:, 2:end);
+Theta2_grad(:, 1) = Theta2_grad(:, 1) ./ m;
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) ./ m + (lambda / m) * Theta2(:, 2:end);
 
 % =========================================================================
 
