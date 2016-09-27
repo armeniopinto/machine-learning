@@ -63,33 +63,21 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 % See the comment on page 5 after the double sum.
-y_matrix = zeros(m, num_labels);
+yy = zeros(m, num_labels);
 for i = 1:m
-	y_matrix(i, y(i)) = 1;
+	yy(i, y(i)) = 1;
 end
 
-for i = 1:m
-	a1 = [1 X(i, :)]';
-	z2 = Theta1 * a1;
-	a2 = [1; sigmoid(z2)];
-	z3 = Theta2 * a2;
-	a3 = sigmoid(z3);
-	h = a3;
-	J += (1 / m) * sum(-y_matrix(i, :)' .* log(h) - (1 - y_matrix(i, :)') .* log(1 - h));
-end
+X = [ones(m, 1) X];
+a1 = X;
+z2 = Theta1 * a1';
+a2 = [ones(m, 1) sigmoid(z2)'];
+z3 = Theta2 * a2';
+a3 = sigmoid(z3);
+h = a3;
+J = (1 / m) * sum(sum(-yy' .* log(h) - (1 - yy') .* log(1 - h)));
 
-r = 0;
-for i = 1:hidden_layer_size
-	theta1_r = Theta1(i, :);
-	theta1_r(1) = 0;
-	r += sum(theta1_r .^ 2);
-end
-for i = 1:num_labels
-	theta2_r = Theta2(i, :);
-	theta2_r(1) = 0;
-	r += sum(theta2_r .^ 2);
-end
-r = (lambda / (2 * m)) * r;
+r = (lambda / (2 * m)) * (sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:end) .^ 2)));
 J += r;
 
 % -------------------------------------------------------------
