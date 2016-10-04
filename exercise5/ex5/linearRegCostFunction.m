@@ -24,6 +24,8 @@ theta_r = theta;
 theta_r(1) = 0;
 J = (1 / (2 * m)) * sum((h - y) .^ 2) + (lambda / (2 * m)) * sum(theta_r .^ 2);
 
+grad = (1 / m) * (X' * (h - y)) + (lambda / m) * theta_r;
+
 % =========================================================================
 
 grad = grad(:);
